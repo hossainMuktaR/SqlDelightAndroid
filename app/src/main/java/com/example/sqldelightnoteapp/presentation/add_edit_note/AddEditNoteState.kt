@@ -13,5 +13,5 @@ data class AddEditNoteState(
     val isContentHintVisible: Boolean = true,
     val noteColor: Int = Note.noteColors.random().toArgb(),
     val errorMessage: String? = null,
-    val currentNoteid: Int? = null,
+    val currentNoteid: Long? = null,
 ): State

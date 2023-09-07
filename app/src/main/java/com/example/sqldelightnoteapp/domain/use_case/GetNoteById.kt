@@ -6,7 +6,7 @@ import com.example.sqldelightnoteapp.domain.repository.NoteRepository
 class GetNoteById(
     private val repository: NoteRepository
 ) {
-    suspend operator fun invoke(id: Int): Note? {
+    suspend operator fun invoke(id: Long): Note? {
         return repository.getNoteById(id)
     }
 }

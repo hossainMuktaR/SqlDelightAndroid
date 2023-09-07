@@ -11,6 +11,6 @@ sealed class AddEditNoteAction: Action {
     data class ContentFocusChanged(val focusState: FocusState,val contentValue: String ): AddEditNoteAction()
     data class ColorChanged(val color: Int): AddEditNoteAction()
     object SaveNote: AddEditNoteAction()
-    data class FetchNoteById(val noteId: Int): AddEditNoteAction()
+    data class FetchNoteById(val noteId: Long): AddEditNoteAction()
     data class FetchNoteComplated(val note: Note): AddEditNoteAction()
 }

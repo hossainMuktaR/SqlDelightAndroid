@@ -3,9 +3,9 @@ plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.com.google.dagger.hilt.android)
+    alias(libs.plugins.cash.sqldelight)
 
     id(libs.plugins.google.devtools.ksp.get().pluginId)
-    id(libs.plugins.kotlin.kapt.get().pluginId)
 }
 
 android {
@@ -72,22 +72,24 @@ dependencies {
 
     // Dagger-Hilt
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
-    kapt(libs.hilt.android.compiler)
+    ksp(libs.hilt.compiler)
+    ksp(libs.hilt.android.compiler)
 
-    // Room
-    implementation(libs.room.runtime)
-    ksp(libs.room.compiler)
 
-    // Kotlin Extensions and Coroutines support for Room
-    implementation(libs.room.ktx)
+    //sqldelight
+    implementation(libs.cash.sqldelight.android.driver)
+    implementation(libs.cash.sqldelight.coRx)
 
     // Coroutines
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
 }
 
-// Allow references to generated code
-kapt {
-    correctErrorTypes = true
+
+sqldelight {
+    databases {
+        create("NoteDatabase") {
+            packageName.set("com.example.sqldelightSpecial")
+        }
+    }
 }

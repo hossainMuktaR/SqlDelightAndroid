@@ -1,7 +1,12 @@
 package com.example.sqldelightnoteapp.di
 
 import android.app.Application
-import androidx.room.Room
+import app.cash.sqldelight.db.SqlDriver
+import app.cash.sqldelight.driver.android.AndroidSqliteDriver
+import com.example.sqldelightSpecial.NoteDatabase
+import com.example.sqldelightnoteapp.data.data_source.NoteDao
+import com.example.sqldelightnoteapp.data.data_source.NoteDaoImpl
+import com.example.sqldelightnoteapp.data.repository.NoteRepositoryImpl
 import com.example.sqldelightnoteapp.domain.repository.NoteRepository
 import com.example.sqldelightnoteapp.domain.use_case.AddNote
 import com.example.sqldelightnoteapp.domain.use_case.DeleteNote
@@ -20,20 +25,29 @@ object NoteModule {
 
     @Provides
     @Singleton
-    fun provideNoteDatabase(app: Application): com.example.sqldelightnoteapp.data.data_source.NoteDatabase {
-        return Room.databaseBuilder(
-            app,
-            com.example.sqldelightnoteapp.data.data_source.NoteDatabase::class.java,
-            com.example.sqldelightnoteapp.data.data_source.NoteDatabase.DATABASE_NAME
-        ).build()
+    fun provideSqlDriver(app: Application): SqlDriver {
+        return AndroidSqliteDriver(
+            schema = NoteDatabase.Schema,
+            context = app,
+            name = "noteDatabase.db"
+        )
     }
 
     @Provides
     @Singleton
-    fun provideNoteRepository(noteDatabase: com.example.sqldelightnoteapp.data.data_source.NoteDatabase): NoteRepository {
-        return com.example.sqldelightnoteapp.data.repository.NoteRepositoryImpl(
-            noteDatabase.noteDao
-        )
+    fun provideNoteDataBase(sqlDriver: SqlDriver): NoteDatabase {
+        return NoteDatabase(sqlDriver)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNoteDao(db: NoteDatabase): NoteDao {
+        return NoteDaoImpl(db)
+    }
+    @Provides
+    @Singleton
+    fun provideNoteRepository(noteDao: NoteDao): NoteRepository {
+        return NoteRepositoryImpl(noteDao)
     }
 
     @Provides

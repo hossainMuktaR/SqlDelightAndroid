@@ -29,12 +29,12 @@ class AddEditNoteViewModel @Inject constructor(
     init {
         savedStateHandle.get<Int>("noteId")?.let { noteId ->
             if (noteId != -1) {
-                fetchNoteById(noteId)
+                fetchNoteById(noteId.toLong())
             }
         }
     }
 
-    private fun fetchNoteById(noteId: Int) = intent {
+    private fun fetchNoteById(noteId: Long) = intent {
         dispatch(AddEditNoteAction.FetchNoteById(noteId))
     }
     fun colorChanged(color: Int) = intent {
